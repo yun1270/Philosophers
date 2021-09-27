@@ -121,11 +121,15 @@ void	must_monitor(void *stat_void)
 	{
 		i = -1;
 		while (++i < s->num_philo)
+		{
 			if (s->philos[i].eat_cnt >= s->must_eat_cnt)
+			{
+				s->philo[i].philo_stat = END_EAT;
 				cnt++;
+			}
+		}
 	}
-	// print_message(NULL, 0);
-	printf("End_eat\n");
+	print_message(s->philo[0]);
 	pthread_mutex_unlock(&(s->die_mutex));
 	return ((void*)0)
 }
