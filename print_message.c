@@ -12,17 +12,20 @@ void	print_philo_stat(t_philo *p, int stat)
 {
 	if (stat == END_EAT)
 		printf("Must eat count reached\n");
-	printf("%d\t %d ", (int)(get_time() - p->stat->start_time), p->pnum + 1);
-	if (stat == PHILO_THINK)
-		printf("is thinking\n");
-	else if (stat == PHILO_EAT)
-		printf("is eating\n");
-	else if (stat == PHILO_SLEEP)
-		printf("is sleeping\n");
-	else if (stat == PHILO_FORK)
-		printf("has taken a fork\n");
 	else
-		printf("died\n");
+	{
+		printf("%d\t %d ", (int)(get_time() - p->stat->start_time), p->pnum + 1);
+		if (stat == PHILO_THINK)
+			printf("is thinking\n");
+		else if (stat == PHILO_EAT)
+			printf("is eating\n");
+		else if (stat == PHILO_SLEEP)
+			printf("is sleeping\n");
+		else if (stat == PHILO_FORK)
+			printf("has taken a fork\n");
+		else
+			printf("died\n");
+	}
 }
 
 void	print_message(t_philo *p)
