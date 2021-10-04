@@ -31,3 +31,10 @@ void	philo_sleep_think(t_philo *p)
 	p->philo_stat = PHILO_THINK;
 	print_message(p, PHILO_THINK);
 }
+
+void	run_philo(t_philo *p)
+{
+	philo_take_fork(p);
+	philo_eat(p);
+	philo_sleep_think(p);
+}

@@ -1,34 +1,5 @@
 #include "philo.h"
 
-int	check_must_eat(t_stat *s, int *cnt)
-{
-	int		i;
-	int		n;
-
-	i = -1;
-	n = 0;
-	while (++i < s->num_philo)
-	{
-		if (cnt[i] != 0)
-			n++;
-		else
-		{
-			if (s->philos[i].eat_cnt >= s->must_eat_cnt)
-			{
-				s->philos[i].philo_stat = END_EAT;
-				cnt[i] = 1;
-			}
-		}
-	}
-	if (n == s->num_philo)
-	{
-		print_message(&(s->philos[0]), END_EAT);
-		pthread_mutex_unlock(&(s->die_mutex));
-		return (SUCCESE);
-	}
-	return (ERROR);
-}
-
 void	*must_monitor(void *stat_void)
 {
 	int		i;
@@ -79,11 +50,7 @@ void	*philo_work(void *philo_void)
 		return ((void *)ERROR);
 	pthread_detach(tid);
 	while (1)
-	{
-		philo_take_fork(p);
-		philo_eat(p);
-		philo_sleep_think(p);
-	}
+		run_philo(p);
 	return ((void *)SUCCESE);
 }
 
