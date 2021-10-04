@@ -44,7 +44,6 @@ void	clear_stat(t_stat *s)
 	int	i;
 
 	i = -1;
-	usleep(100000);
 	while (++i < s->num_philo)
 	{
 		pthread_mutex_destroy(&(s->philos[i].use_mutex));

@@ -10,7 +10,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-# define ERROR -1
+# define ERROR 1
 # define SUCCESE 0
 
 # define PHILO_THINK 0
@@ -46,11 +46,16 @@ typedef struct s_stat
 }	t_stat;
 
 uint64_t	get_time(void);
+void		ft_usleep(uint64_t time);
+
 int			philo_atoi(char *str);
-void		print_message(t_philo *p);
+void		print_message(t_philo *p, int stat);
 int			start_philo(t_stat *stat);
 int			init(t_stat *s, int	av[5]);
 void		clear_stat(t_stat *s);
-void		run_philo(t_philo *p);
+// void		run_philo(t_philo *p);
+void	philo_take_fork(t_philo *p);
+void	philo_eat(t_philo *p);
+void	philo_sleep_think(t_philo *p);
 
 #endif

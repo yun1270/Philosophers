@@ -28,12 +28,11 @@ void	print_philo_stat(t_philo *p, int stat)
 	}
 }
 
-void	print_message(t_philo *p)
+void	print_message(t_philo *p, int stat)
 {
-	static int	end = 0;
-	int			stat;
+	int	end;
 
-	stat = p->philo_stat;
+	end = 0;
 	pthread_mutex_lock(&(p->stat->print_mutex));
 	if (end == 0)
 	{

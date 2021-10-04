@@ -1,28 +1,50 @@
 #include "philo.h"
 
-void	*must_monitor(void *stat_void)
+int	check_must_eat(t_stat *s, int *cnt)
 {
 	int		i;
-	int		cnt;
-	t_stat	*s;
+	int		n;
 
-	s = (t_stat *)stat_void;
-	cnt = 0;
-	while (cnt < s->must_eat_cnt)
+	i = -1;
+	n = 0;
+	while (++i < s->num_philo)
 	{
-		i = -1;
-		while (++i < s->num_philo)
+		if (cnt[i] != 0)
+			n++;
+		else
 		{
 			if (s->philos[i].eat_cnt >= s->must_eat_cnt)
 			{
 				s->philos[i].philo_stat = END_EAT;
-				cnt++;
+				cnt[i] = 1;
 			}
 		}
 	}
-	print_message(&(s->philos[0]));
-	pthread_mutex_unlock(&(s->die_mutex));
-	return ((void *)0);
+	if (n == s->num_philo)
+	{
+		print_message(&(s->philos[0]), END_EAT);
+		pthread_mutex_unlock(&(s->die_mutex));
+		return (SUCCESE);
+	}
+	return (ERROR);
+}
+
+void	*must_monitor(void *stat_void)
+{
+	int		i;
+	t_stat	*s;
+	int		*cnt;
+
+	s = (t_stat *)stat_void;
+	cnt = (int *)malloc(sizeof(int) * s->num_philo);
+	if (cnt == NULL)
+		return ((void *)ERROR);
+	i = -1;
+	while (cnt[++i])
+		cnt[i] = 0;
+	while (1)
+		if (check_must_eat(s, cnt) == SUCCESE)
+			return ((void *)SUCCESE);
 }
 
 void	*philo_monitor(void *philo_void)
@@ -36,10 +58,10 @@ void	*philo_monitor(void *philo_void)
 		if (get_time() > p->limit)
 		{
 			p->philo_stat = PHILO_DIE;
-			print_message(p);
+			print_message(p, PHILO_DIE);
 			pthread_mutex_unlock(&(p->stat->die_mutex));
 			pthread_mutex_unlock(&(p->use_mutex));
-			return ((void *)0);
+			return ((void *)SUCCESE);
 		}
 		pthread_mutex_unlock(&(p->use_mutex));
 		usleep(1000);
@@ -57,35 +79,29 @@ void	*philo_work(void *philo_void)
 		return ((void *)ERROR);
 	pthread_detach(tid);
 	while (1)
-		run_philo(p);
-	return ((void *)0);
+	{
+		philo_take_fork(p);
+		philo_eat(p);
+		philo_sleep_think(p);
+	}
+	return ((void *)SUCCESE);
 }
 
-int	make_philo(t_stat *stat)
+int	make_philo(t_stat *stat, int i)
 {
-	int			i;
 	void		*p;
-	pthread_t	tid;
+	pthread_t	tid1;
 
-	i = 0;
 	while (i < stat->num_philo)
 	{
 		p = (void *)(&(stat->philos[i]));
-		if (pthread_create(&tid, NULL, &philo_work, p) != SUCCESE)
+		if (pthread_create(&tid1, NULL, &philo_work, p) != 0)
 			return (ERROR);
-		pthread_detach(tid);
+		pthread_detach(tid1);
 		i += 2;
 	}
-	usleep(10000);
-	i = 1;
-	while (i < stat->num_philo)
-	{
-		p = (void *)(&(stat->philos[i]));
-		if (pthread_create(&tid, NULL, &philo_work, p) != SUCCESE)
-			return (ERROR);
-		pthread_detach(tid);
-		i += 2;
-	}
+	if (i % 2 == 0)
+		ft_usleep(stat->num_philo);
 	return (SUCCESE);
 }
 
@@ -100,7 +116,7 @@ int	start_philo(t_stat *stat)
 			return (ERROR);
 		pthread_detach(tid);
 	}
-	if (make_philo(stat) == ERROR)
+	if (make_philo(stat, 0) == ERROR || make_philo(stat, 1) == ERROR)
 		return (ERROR);
 	return (SUCCESE);
 }

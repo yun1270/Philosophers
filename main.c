@@ -2,7 +2,7 @@
 
 static int	print_error(char *error)
 {
-	printf("[ERROR] %s\n", error);
+	printf("Philosopher: error: %s\n", error);
 	return (ERROR);
 }
 
@@ -16,7 +16,7 @@ static int	check_arg(int argc, char *argv[], int (*av)[5])
 	while (++i < argc)
 	{
 		(*av)[i - 1] = philo_atoi(argv[i]);
-		if ((*av)[i - 1] == ERROR)
+		if ((*av)[i - 1] == -1)
 			return (print_error("Wrong Argument"));
 	}
 	if (i == 5)
@@ -39,6 +39,6 @@ int	main(int argc, char *argv[])
 		return (print_error("During start_philo"));
 	pthread_mutex_lock(&(stat.die_mutex));
 	pthread_mutex_unlock(&(stat.die_mutex));
-	usleep(10000);
+	usleep(100000);
 	clear_stat(&stat);
 }
