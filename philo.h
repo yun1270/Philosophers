@@ -22,27 +22,26 @@
 
 typedef struct s_philo
 {
-	int				pnum;			/* 철학자 위치 */
-	int				philo_stat;		/* 철학자 상태 */
-	int				eat_cnt;		/* 먹은 횟수 */
-	uint64_t		limit;			/* 철학자가 죽는 시간 */
-	pthread_mutex_t	use_mutex;		/* 죽었는지 확인하는 동안 혹은 먹는 동안 다른 동작을 실행하지 못하게하는 mutex */
-									/* 먹는 동안은 죽을 수 없고, 죽었는데 먹을 수 없으니까*/
+	int				pnum;
+	int				philo_stat;
+	int				eat_cnt;
+	uint64_t		limit;
+	pthread_mutex_t	use_mutex;
 	struct s_stat	*stat;
 }	t_philo;
 
 typedef struct s_stat
 {
-	int				num_philo;		/* 철학자 수 */
-	uint64_t		time_to_die;	/* 죽을때까지 시간 */
-	uint64_t		time_to_eat;	/* 먹는 시간 */
-	uint64_t		time_to_sleep;	/* 자는 시간 */
-	uint64_t		start_time;		/* 시작 시간 */
-	int				must_eat_cnt;	/* 먹어야하는 횟수 */
-	t_philo			*philos;		/* 철학자 구조체 */
-	pthread_mutex_t	*fork_mutex;	/* 포크 사용중인지 확인하는 mutex */
-	pthread_mutex_t	die_mutex;		/* 철학자 죽었는지 확인하는 mutex */
-	pthread_mutex_t	print_mutex;	/* 문구 출력 중 */
+	int				num_philo;
+	uint64_t		time_to_die;
+	uint64_t		time_to_eat;
+	uint64_t		time_to_sleep;
+	uint64_t		start_time;
+	int				must_eat_cnt;
+	t_philo			*philos;
+	pthread_mutex_t	*fork_mutex;
+	pthread_mutex_t	die_mutex;
+	pthread_mutex_t	print_mutex;
 }	t_stat;
 
 uint64_t	get_time(void);

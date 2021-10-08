@@ -14,8 +14,13 @@ void	*must_monitor(void *stat_void)
 	while (cnt[++i])
 		cnt[i] = 0;
 	while (1)
+	{
 		if (check_must_eat(s, cnt) == SUCCESE)
+		{
+			free(cnt);
 			return ((void *)SUCCESE);
+		}
+	}
 }
 
 void	*philo_monitor(void *philo_void)

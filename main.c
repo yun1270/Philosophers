@@ -41,4 +41,5 @@ int	main(int argc, char *argv[])
 	pthread_mutex_unlock(&(stat.die_mutex));
 	usleep(100000);
 	clear_stat(&stat);
+	return (0);
 }
