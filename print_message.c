@@ -33,12 +33,13 @@ void	print_message(t_philo *p, int stat)
 	int	end;
 
 	end = 0;
+	usleep(10);
 	pthread_mutex_lock(&(p->stat->print_mutex));
 	if (end == 0)
 	{
-		print_philo_stat(p, stat);
 		if (stat == END_EAT || stat == PHILO_DIE)
 			end = 1;
+		print_philo_stat(p, stat);
 	}
 	if (end == 0)
 		pthread_mutex_unlock(&(p->stat->print_mutex));

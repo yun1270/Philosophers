@@ -7,6 +7,8 @@ static void	init_philo(t_stat *s, int i)
 	s->philos[i].philo_stat = PHILO_THINK;
 	s->philos[i].stat = s;
 	pthread_mutex_init(&(s->philos[i].use_mutex), NULL);
+	pthread_mutex_init(&(s->philos[i].must_eat), NULL);
+	pthread_mutex_lock(&(s->philos[i].must_eat));
 	pthread_mutex_init(&(s->fork_mutex[i]), NULL);
 }
 
@@ -44,9 +46,11 @@ void	clear_stat(t_stat *s)
 	int	i;
 
 	i = -1;
+	usleep(10000);
 	while (++i < s->num_philo)
 	{
 		pthread_mutex_destroy(&(s->philos[i].use_mutex));
+		pthread_mutex_destroy(&(s->philos[i].must_eat));
 		pthread_mutex_destroy(s->fork_mutex);
 	}
 	pthread_mutex_destroy(&(s->print_mutex));

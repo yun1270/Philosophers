@@ -4,23 +4,20 @@ void	*must_monitor(void *stat_void)
 {
 	int		i;
 	t_stat	*s;
-	int		*cnt;
+	int		cnt;
 
 	s = (t_stat *)stat_void;
-	cnt = (int *)malloc(sizeof(int) * s->num_philo);
-	if (cnt == NULL)
-		return ((void *)ERROR);
-	i = -1;
-	while (cnt[++i])
-		cnt[i] = 0;
-	while (1)
+	cnt = 0;
+	while (cnt < s->must_eat_cnt)
 	{
-		if (check_must_eat(s, cnt) == SUCCESE)
-		{
-			free(cnt);
-			return ((void *)SUCCESE);
-		}
+		i = -1;
+		while (++i < s->num_philo)
+			pthread_mutex_lock(&(s->philos[i].must_eat));
+		cnt++;
 	}
+	print_message(&(s->philos[0]), END_EAT);
+	pthread_mutex_unlock(&(s->die_mutex));
+	return ((void *)SUCCESE);
 }
 
 void	*philo_monitor(void *philo_void)
@@ -40,7 +37,7 @@ void	*philo_monitor(void *philo_void)
 			return ((void *)SUCCESE);
 		}
 		pthread_mutex_unlock(&(p->use_mutex));
-		usleep(1000);
+		usleep(10);
 	}
 }
 

@@ -27,6 +27,7 @@ typedef struct s_philo
 	int				eat_cnt;
 	uint64_t		limit;
 	pthread_mutex_t	use_mutex;
+	pthread_mutex_t	must_eat;
 	struct s_stat	*stat;
 }	t_philo;
 

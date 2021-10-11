@@ -5,6 +5,7 @@ void	philo_take_fork(t_philo *p)
 	pthread_mutex_lock(&(p->stat->fork_mutex[
 			(p->pnum - 1 + p->stat->num_philo) % p->stat->num_philo]));
 	p->philo_stat = PHILO_FORK;
+	print_message(p, PHILO_FORK);
 	pthread_mutex_lock(&(p->stat->fork_mutex[p->pnum]));
 	print_message(p, PHILO_FORK);
 }
@@ -17,7 +18,7 @@ void	philo_eat(t_philo *p)
 	p->limit = get_time() + p->stat->time_to_die;
 	ft_usleep(p->stat->time_to_eat);
 	pthread_mutex_unlock(&(p->use_mutex));
-	(p->eat_cnt)++;
+	pthread_mutex_unlock(&(p->must_eat));
 }
 
 void	philo_sleep_think(t_philo *p)

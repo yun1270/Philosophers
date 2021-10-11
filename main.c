@@ -39,7 +39,6 @@ int	main(int argc, char *argv[])
 		return (print_error("During start_philo"));
 	pthread_mutex_lock(&(stat.die_mutex));
 	pthread_mutex_unlock(&(stat.die_mutex));
-	usleep(100000);
 	clear_stat(&stat);
 	return (0);
 }
